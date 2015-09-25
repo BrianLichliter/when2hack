@@ -5,3 +5,26 @@
 <div>
     {{ event }}
 </div>
+
+<div style="margin-top: 50px;">
+    <div style="display:inline-block; width: 30%; ">
+        {{ user.name }}'s Availability
+
+        <table border="1">
+            <tr ng-repeat="timeUnit in timeUnits"
+                ng-mouseover="updateEndTime(timeUnit)"
+                ng-mousedown="startSelection(timeUnit)"
+                ng-mouseup="endSelection()"
+                ng-class="">
+                <td>{{ timeUnit }}</td>
+                <td style="width: 100px;">avail</td>
+            </tr>
+        </table>
+        <div>
+            {{ availTimes }}
+        </div>
+    </div>
+    <div style="display:inline-block; width: 30%;">
+        Group's Availability
+    </div>
+</div>

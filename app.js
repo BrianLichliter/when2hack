@@ -62,6 +62,35 @@ if (Meteor.isClient) {
   angular.module('when2hack').controller('EventDetailsCtrl', function ($scope, $meteor, $stateParams, $rootScope) {
     $scope.event = $meteor.object(Events, { name: $stateParams.eventName }, true);
     $scope.user = $rootScope.user;
+    $scope.timeUnits = [ 9.0, 9.3, 10, 10.3, 11, 11.3, 12, 12.3 ];
+    $scope.availTimes = [];
+
+    $scope.availTimes = [];
+    $scope.selectionStarted = false;
+    $scope.startTime = 0;
+    $scope.endTime = 0;
+    $scope.startSelection = function( startTimeUnit ) {
+      $scope.selectionStarted = true;
+      $scope.startTime = startTimeUnit;
+    };
+    $scope.endSelection = function() {
+      $scope.selectionStarted = false;
+
+      //
+    };
+    $scope.updateEndTime = function( timeUnit ) {
+        if ( !$scope.selectionStarted ) return;
+        $scope.endTime = timeUnit;
+
+        var idx = $scope.availTimes.indexOf( timeUnit );
+        if ( idx < 0 )
+          $scope.availTimes.push( timeUnit );
+        else
+          $scope.availTimes.splice(idx, 1);
+    };
+    $scope.cellClass = function( timeUnit ) {
+
+    };
   });
 
   ///////////////////////////////////////////////////////////
