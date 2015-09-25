@@ -41,6 +41,8 @@ if (Meteor.isClient) {
           alert("username required!");
           return;
         }
+        
+        $scope.newEvent.timeUnits = {'0900':[],'1000':[],'1100':[],'1200':[],'1300':[],'1400':[],'1500':[],'1600':[],'1700':[]}
         $scope.events.push($scope.newEvent);
         $state.go("eventDetails", { eventName: $scope.newEvent.name });
     };
@@ -48,8 +50,9 @@ if (Meteor.isClient) {
 
   angular.module('when2hack').controller('EventDetailsCtrl', function ($scope, $meteor, $stateParams, $rootScope) {
     $scope.event = $meteor.object(Events, { name: $stateParams.eventName }, true);
+    console.log($scope.event)
     $scope.user = $rootScope.user;
-    $scope.timeUnits = {"0900":true,"0915":false,"0930":false,"0945":false};
+    $scope.timeUnits = {"0900":false,"1000":false,"1100":false,"1200":false};
     console.log($scope.timeUnits)
 
     // possible values are select and unselect
@@ -62,7 +65,24 @@ if (Meteor.isClient) {
     angular.element(document).bind('mouseup', function(){
         $scope.selectionStarted = false;
         console.log("ending selection")
+        $scope.updateEvent();
     });
+
+    $scope.updateEvent = function() {
+      angular.forEach($scope.event.timeUnits, function(usersForTime, time) {
+        if($scope.timeUnits[time]) {
+          var idx = usersForTime.indexOf($scope.user.name);
+          if (idx < 0)
+            usersForTime.push($scope.user.name);
+        }
+        else {
+          var idx = usersForTime.indexOf($scope.user.name);
+          if (idx >= 0)
+            usersForTime.splice(idx, 1);
+        }
+      })
+      $scope.$apply();
+    }
 
     $scope.startSelection = function( timeUnit ) {
       console.log("starting selection")
