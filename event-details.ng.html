@@ -11,17 +11,17 @@
         {{ user.name }}'s Availability
 
         <table border="1">
-            <tr ng-repeat="timeUnit in timeUnits"
-                ng-mouseover="updateEndTime(timeUnit)"
+            <tr ng-repeat="(timeUnit, avail) in timeUnits"
+                ng-mouseover="updateSelection(timeUnit)"
                 ng-mousedown="startSelection(timeUnit)"
                 ng-mouseup="endSelection()"
                 ng-class="">
                 <td>{{ timeUnit }}</td>
-                <td style="width: 100px;">avail</td>
+                <td style="width: 100px;" ng-class = "cellClass(timeUnit)">{{avail}}</td>
             </tr>
         </table>
         <div>
-            {{ availTimes }}
+            {{ timeUnits }}
         </div>
     </div>
     <div style="display:inline-block; width: 30%;">
