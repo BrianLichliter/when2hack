@@ -42,23 +42,26 @@ if (Meteor.isClient) {
           return;
         }
         
-        $scope.newEvent.timeUnits = {'0900':[],'1000':[],'1100':[],'1200':[],'1300':[],'1400':[],'1500':[],'1600':[],'1700':[]}
+        $scope.newEvent.timeUnits = {'9:00 AM':[],'10:00 AM':[],'11:00 AM':[],'12:00 PM':[],'1:00 PM':[],'2:00 PM':[],'3:00 PM':[],'4:00 PM':[],'5:00 PM':[]}
         $scope.events.push($scope.newEvent);
         $state.go("eventDetails", { eventName: $scope.newEvent.name });
     };
   });
 
   angular.module('when2hack').controller('EventDetailsCtrl', function ($scope, $meteor, $stateParams, $rootScope) {
-    $scope.event = $meteor.object(Events, { name: $stateParams.eventName }, true);
-    console.log($scope.event)
-    $scope.user = $rootScope.user;
-    $scope.timeUnits = {"0900":false,"1000":false,"1100":false,"1200":false};
-    console.log($scope.timeUnits)
+    $scope.event = $scope.$meteorObject(Events, { name: $stateParams.eventName }, true)
+    $scope.timeUnits = {};
+    console.log('starting foreach with this variable')
+    console.log($scope.event.timeUnits)
+    angular.forEach($scope.event.timeUnits, function(users, time){
+      $scope.timeUnits[time] = false;
+    })
 
     // possible values are select and unselect
     $scope.selectionType = true;
     // possible values are true and false
     $scope.selectionStarted = false;
+    // start and end times of our selection
     $scope.startTime = 0;
     $scope.endTime = 0;
 
@@ -92,6 +95,7 @@ if (Meteor.isClient) {
       $scope.startTime = timeUnit;
       $scope.endTime = timeUnit;
     };
+
     $scope.updateSelection = function( timeUnit ) {
       console.log("updating selection")
         if ( !$scope.selectionStarted ) {
@@ -107,9 +111,10 @@ if (Meteor.isClient) {
           }
         }
     };
+
     $scope.cellClass = function( timeUnit ) {
       if ($scope.timeUnits[timeUnit]) {
-        return "avail";
+        return "success";
       } else {
         return "";
       }
