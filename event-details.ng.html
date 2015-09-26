@@ -1,36 +1,54 @@
+<div class = "container">
 <div>
-    Event Name: {{ event.name }} <br/>
-    Username: {{ user.name }} <br/>
-</div>
-<div>
-    {{ event }}
+    <h1>{{ event.name }} on {{ event.date }}</h1>
 </div>
 
-<div style="margin-top: 50px;">
-    <div style="display:inline-block; width: 30%; ">
-        {{ user.name }}'s Availability
 
-        <table class = "noselect" border="1">
+    <div class = "col-md-3" ng-show = "user.name">
+        <h3>{{ user.name }}'s Availability</h3>
+
+        <table class = "table table-bordered table-hover noselect">
+            <tr class = "info">
+                <th> Time (hour) </th>
+                <th> Availability </th>
+            </tr>
             <tr ng-repeat="(timeUnit, avail) in timeUnits"
                 ng-mouseover="updateSelection(timeUnit)"
                 ng-mousedown="startSelection(timeUnit)"
                 ng-mouseup="endSelection()"
-                ng-class="">
+                ng-class = "cellClass(timeUnit)">
                 <td>{{ timeUnit }}</td>
-                <td style="width: 100px;" ng-class = "cellClass(timeUnit)">{{avail}}</td>
+                <td ng-show="avail">
+                    yes
+                </td>
+                <td ng-show="!avail">
+                    no
+                </td> 
             </tr>
         </table>
-        <div>
-            {{ timeUnits }}
-        </div>
     </div>
-    <div style="display:inline-block; width: 30%;">
-        Group's Availability
 
-        <table class = "noselect" border = "1">
+    <div class = "col-md-3" ng-show = "!user.name">
+        Enter Username: <input
+                            ng-model="user.name" 
+                            ng-model-options="{ updateOn: 'blur' }"
+                            ng-keyup="cancel($event)"> <br/>
+        <button class = "btn btn-primary">Sign In!</button>
+    </div>
+
+    <div class = "col-md-6 col-md-offset-3">
+        <h3>Group's Availability</h3>
+
+        <table class = "table table-bordered table-hover noselect" border = "1">
+            <tr class = "info">
+                <th> Time (hour) </th>
+                <th> # Available </th>
+                <th> Names </th>
+            </tr>
             <tr ng-repeat = "(time, usersForTime) in event.timeUnits">
                 <td> {{ time }} </td>
                 <td> {{ usersForTime.length }} </td>
+                <td> {{ usersForTime }} </td>
             </tr>
         </table>
     </div>

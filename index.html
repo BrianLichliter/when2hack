@@ -4,11 +4,17 @@
   <base href="/">
 </head>
 <body ng-app="when2hack">
-  <h1>
-      <a href="/event">Home</a>
-    </h1>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="event">
+	        when2hack
+	      </a>
+	    </div>
+	  </div>
+	</nav>
 
-    <div ui-view></div>
+    <div style = "padding-top: 50px;" ui-view></div>
 
   <!-- <div ng-include="'index.ng.html'"></div>
   asdf -->
