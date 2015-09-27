@@ -29,7 +29,7 @@ if (Meteor.isClient) {
     }]);
 
   angular.module('when2hack').controller('EventCtrl', ['$scope', '$meteor', '$state', '$stateParams', '$rootScope', function ($scope, $meteor, $state, $stateParams, $rootScope) {
-    $rootScope.user = {};
+    $rootScope.user = { name: "" };
     $scope.user = $rootScope.user;
 
     // all changes made to $scope.parties will have effect on the Parties DB as well
@@ -51,10 +51,24 @@ if (Meteor.isClient) {
     };
   }]);
 
-  angular.module('when2hack').controller('EventDetailsCtrl', ['$scope', '$meteor', '$stateParams', '$rootScope', function ($scope, $meteor, $stateParams, $rootScope) {
-    $scope.event = $scope.$meteorObject(Events, { name: $stateParams.eventName }, true)
+  angular.module('when2hack').controller('EventDetailsCtrl',
+      ['$scope', '$meteor', '$stateParams', '$rootScope', "$location", function ($scope, $meteor, $stateParams, $rootScope, $location) {
+
+        $scope.curURL = $location.absUrl();
+    $scope.event = $scope.$meteorObject(Events, { name: $stateParams.eventName }, true);
     // currently resets availability of those logging back in... should change
     $scope.timeUnits = {'9:00 AM':false,'10:00 AM':false,'11:00 AM':false,'12:00 PM':false,'1:00 PM':false,'2:00 PM':false,'3:00 PM':false,'4:00 PM':false,'5:00 PM':false};
+
+        //make sure that if logging in with same name, the user's availabile slots
+        //are carried over from previous selection
+        $scope.$watch(function() { return $rootScope.user.name; },  function( newvalue, oldvalue ) {
+          if ( newvalue === undefined ) return;
+          console.log("username has changed! user:" + newvalue);
+          angular.forEach($scope.event.timeUnits, function(usersForTime, time) {
+            if ( usersForTime.indexOf( newvalue ) >= 0 )
+              $scope.timeUnits[ time ] = true;
+          });
+        });
 
     // possible values are select and unselect
     $scope.selectionType = true;
@@ -66,7 +80,7 @@ if (Meteor.isClient) {
 
     angular.element(document).bind('mouseup', function(){
         $scope.selectionStarted = false;
-        console.log("ending selection")
+        console.log("ending selection");
         $scope.updateEvent();
     });
 
@@ -82,9 +96,9 @@ if (Meteor.isClient) {
           if (idx >= 0)
             usersForTime.splice(idx, 1);
         }
-      })
+      });
       $scope.$apply();
-    }
+    };
 
     $scope.startSelection = function( timeUnit ) {
       console.log("starting selection")
@@ -118,5 +132,30 @@ if (Meteor.isClient) {
         return "";
       }
     };
+
+        $scope.groupAvailClass = function( timeUnit ) {
+          var maxAvail = 0;
+          var all_user_names = [];
+          var user_name;
+          angular.forEach($scope.event.timeUnits, function(usersForTime, time) { //note: (value, key)
+            if ( usersForTime.length > maxAvail )
+              maxAvail = usersForTime.length;
+
+            for ( var i = 0; i < usersForTime.length; ++i ) {
+              user_name = usersForTime[i];
+              if ( all_user_names.indexOf( user_name ) < 0 )
+                all_user_names.push( user_name );
+            }
+          });
+
+          //colour: time with everyone inside
+          if ( $scope.event.timeUnits[timeUnit].length == all_user_names.length )
+            return "avail_all";
+
+          //colour: time with highest number of people
+          if ( $scope.event.timeUnits[timeUnit].length == maxAvail )
+            return "avail_max";
+          return "";
+        };
   }]);
 }

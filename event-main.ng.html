@@ -1,5 +1,6 @@
 <div class = "container" style = "margin-top: 35px">
 	<form class = "col-md-3">
+        <h3>Create an Event!</h3>
 		<div class="form-group">
 		<label for="exampleInputEmail1">Event Name</label>
 			<input type="string" ng-model = "newEvent.name" class="form-control" placeholder="Sample Event">
@@ -10,7 +11,9 @@
 		</div>
 		<button type="submit" ng-click = "createEvent()" class="btn btn-primary">Create!</button>
 	</form>
+
 	<div class = "col-md-9">
+        <h3>List of Current Events</h3>
 		<table class = "table table-bordered table-hover table-responsive" style = "margin-top: 21px;">
 			<tr>
 				<th>Event</th>

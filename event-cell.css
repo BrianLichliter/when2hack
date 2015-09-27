@@ -8,3 +8,11 @@
 
     cursor: default;
 }
+
+.avail_max {
+    background-color: lightskyblue;
+}
+
+.avail_all {
+    background-color: palevioletred;
+}
