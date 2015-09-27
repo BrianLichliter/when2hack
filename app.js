@@ -53,12 +53,8 @@ if (Meteor.isClient) {
 
   angular.module('when2hack').controller('EventDetailsCtrl', function ($scope, $meteor, $stateParams, $rootScope) {
     $scope.event = $scope.$meteorObject(Events, { name: $stateParams.eventName }, true)
-    $scope.timeUnits = {};
-    console.log('starting foreach with this variable')
-    console.log($scope.event.timeUnits)
-    angular.forEach($scope.event.timeUnits, function(users, time){
-      $scope.timeUnits[time] = false;
-    })
+    // currently resets availability of those logging back in... should change
+    $scope.timeUnits = {'9:00 AM':false,'10:00 AM':false,'11:00 AM':false,'12:00 PM':false,'1:00 PM':false,'2:00 PM':false,'3:00 PM':false,'4:00 PM':false,'5:00 PM':false};
 
     // possible values are select and unselect
     $scope.selectionType = true;
