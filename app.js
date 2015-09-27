@@ -28,7 +28,7 @@ if (Meteor.isClient) {
       $urlRouterProvider.otherwise("/event");
     }]);
 
-  angular.module('when2hack').controller('EventCtrl', function ($scope, $meteor, $state, $rootScope) {
+  angular.module('when2hack').controller('EventCtrl', ['$scope', '$meteor', '$state', '$stateParams', '$rootScope', function ($scope, $meteor, $state, $stateParams, $rootScope) {
     $rootScope.user = {};
     $scope.user = $rootScope.user;
 
@@ -49,9 +49,9 @@ if (Meteor.isClient) {
         $scope.events.push($scope.newEvent);
         $state.go("eventDetails", { eventName: $scope.newEvent.name });
     };
-  });
+  }]);
 
-  angular.module('when2hack').controller('EventDetailsCtrl', function ($scope, $meteor, $stateParams, $rootScope) {
+  angular.module('when2hack').controller('EventDetailsCtrl', ['$scope', '$meteor', '$stateParams', '$rootScope', function ($scope, $meteor, $stateParams, $rootScope) {
     $scope.event = $scope.$meteorObject(Events, { name: $stateParams.eventName }, true)
     // currently resets availability of those logging back in... should change
     $scope.timeUnits = {'9:00 AM':false,'10:00 AM':false,'11:00 AM':false,'12:00 PM':false,'1:00 PM':false,'2:00 PM':false,'3:00 PM':false,'4:00 PM':false,'5:00 PM':false};
@@ -118,5 +118,5 @@ if (Meteor.isClient) {
         return "";
       }
     };
-  });
+  }]);
 }
