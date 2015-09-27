@@ -34,6 +34,9 @@ if (Meteor.isClient) {
 
     // all changes made to $scope.parties will have effect on the Parties DB as well
     $scope.events = $meteor.collection(Events);
+    $scope.removeEvent = function(event) {
+      $scope.events.remove(event._id);
+    };
     $scope.createEvent = function() {
         if ( $rootScope.user.name == "" )
         {

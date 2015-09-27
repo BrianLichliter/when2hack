@@ -1,6 +1,6 @@
 <div class = "container">
 <div>
-    <h1>{{ event.name }} on {{ event.date }}</h1>
+    <h1>{{ event.name }} on {{ event.date | date:'fullDate'}}</h1>
 </div>
 
 
@@ -29,10 +29,15 @@
     </div>
 
     <div class = "col-md-3" ng-show = "!user.name">
-        Enter Username: <input
-                            ng-model="user.name" 
-                            ng-model-options="{ updateOn: 'blur' }"
-                            ng-keyup="cancel($event)"> <br/>
+        <div class="form-group">
+            <label>Enter your name</label>
+            <input type="string" 
+                ng-model="user.name" 
+                ng-model-options="{ updateOn: 'blur' }"
+                ng-keyup="cancel($event)" 
+                class="form-control" 
+                placeholder="Sample Name">
+        </div>
         <button class = "btn btn-primary">Sign In!</button>
     </div>
 
